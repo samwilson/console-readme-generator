@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__.'/../vendor/autoload.php';
+
+use Samwilson\ConsoleReadmeGenerator\Command\ReadmeGenCommand;
+use Symfony\Component\Console\Application;
+
+$readmeGenCommand = new ReadmeGenCommand();
+$readmeGenCommand->setHidden(false);
+
+$application = new Application();
+$application->add($readmeGenCommand);
+$application->run();

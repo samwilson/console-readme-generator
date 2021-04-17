@@ -1,0 +1,42 @@
+{
+    "name": "samwilson/console-readme-generator",
+    "description": "A tool to add command documentation",
+    "type": "library",
+    "require": {
+        "symfony/console": "^5.2"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sam Wilson",
+            "homepage": "https://samwilson.id.au"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Samwilson\\ConsoleReadmeGenerator\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Samwilson\\ConsoleReadmeGenerator\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "php-parallel-lint/php-parallel-lint": "^1.0",
+        "roslov/psr12ext": "^4.0",
+        "mediawiki/minus-x": "^1.1",
+        "phpunit/phpunit": "^8.2",
+        "symfony/var-dumper": "^4.3",
+        "phan/phan": "^4.0"
+    },
+    "scripts": {
+        "test": [
+            "composer validate",
+            "phpcs -s .",
+            "minus-x check .",
+            "./bin/console readme -i readme",
+            "phan --allow-polyfill-parser"
+        ]
+    }
+}
