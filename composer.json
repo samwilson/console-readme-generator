@@ -35,7 +35,7 @@
             "composer validate",
             "phpcs -s .",
             "minus-x check .",
-            "./bin/console readme -i readme",
+            "./bin/console generate-readme -i generate-readme",
             "phan --allow-polyfill-parser"
         ]
     }
