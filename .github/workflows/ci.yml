@@ -1,0 +1,35 @@
+name: CI
+
+on: ['push', 'pull_request']
+
+jobs:
+  build:
+
+    strategy:
+      matrix:
+        # All supported PHP versions https://www.php.net/supported-versions.php
+        php: [ '7.2', '7.3', '7.4' ]
+
+    runs-on: ubuntu-latest
+
+    name: PHP ${{ matrix.php }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{matrix.php}}
+        extensions: fileinfo, json, curl
+
+    - name: Install
+      run: |
+        composer install
+
+    - name: Test
+      run: |
+        composer test
+        git status
+        git status | grep "nothing to commit, working tree clean"

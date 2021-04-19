@@ -17,13 +17,15 @@ to projects' Readme files.
 This will modify your `README.md` file.
 The usage documentation below is an example of the output.
 
+[![CI](https://github.com/samwilson/console-readme-generator/actions/workflows/ci.yml/badge.svg)](https://github.com/samwilson/console-readme-generator/actions/workflows/ci.yml)
+
 ## Usage
 
-### readme
+### generate-readme
 
 Generate command documentation for a Readme file.
 
-    readme [-i|--include INCLUDE] [-r|--readme README]
+    generate-readme [-i|--include INCLUDE] [-r|--readme README]
 
 * `--include` `-i` — Explicitly include a command.
   This option can be provided multiple times.
