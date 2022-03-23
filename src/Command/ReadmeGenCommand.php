@@ -23,7 +23,7 @@ class ReadmeGenCommand extends Command
             'include',
             'i',
             InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-            'Explicitly include a command.',
+            'Explicitly include a command (e.g. "app:foo") or namespace (e.g. "app:" with trailing colon).',
             []
         );
         $this->addOption(
@@ -52,9 +52,17 @@ class ReadmeGenCommand extends Command
         $out = [];
         $defaultExcluded = ['help', 'list', $this->getName()];
         foreach ($allCommands as $command) {
-            $include = $included
-                ? in_array($command->getName(), $included)
-                : !in_array($command->getName(), $defaultExcluded);
+            // Include if not in the default excluded list.
+            $include = !in_array($command->getName(), $defaultExcluded);
+            foreach ($included as $inc) {
+                // Include if the name matches.
+                $include = $command->getName() === $inc
+                    // Include if the whole namespace is included.
+                    || (substr($inc, -1) === ':' && str_starts_with($command->getName(), $inc) );
+                if ($include) {
+                    break;
+                }
+            }
             if ($include) {
                 $out[] = $command;
             }
@@ -104,9 +112,9 @@ class ReadmeGenCommand extends Command
         }
         $readme = file_get_contents($readmePath);
         $usageSection = $input->getOption('usage');
-        preg_match("/(.*#+ ?$usageSection\n)(.*)(\n## .*)/s", $readme, $matches);
+        preg_match("/(.*\n## ?$usageSection\n)(.*)(\n## .*)/s", $readme, $matches);
         if (!isset($matches[1])) {
-            $io->error('No "' . $usageSection . '" header found in ' . $readmePath);
+            $io->error('No "## ' . $usageSection . '" header found in ' . $readmePath);
             return Command::FAILURE;
         }
         $newReadme = $matches[1] . $commandInfo . $matches[3];
