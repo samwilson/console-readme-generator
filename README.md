@@ -6,7 +6,7 @@ to projects' Readme files.
 
 ## Configuration
 
-1. Add a `## Usage` header to your Readme.
+1. Add a `## Usage` header to your Readme (the name of this section can be configured; see below).
 2. Add the `generate-readme` command to your Application,
    e.g. in `./bin/console`:
    ```php
@@ -25,12 +25,14 @@ The usage documentation below is an example of the output.
 
 Generate command documentation for a Readme file.
 
-    generate-readme [-i|--include INCLUDE] [-r|--readme README]
+    generate-readme [-i|--include INCLUDE] [-r|--readme README] [-u|--usage USAGE]
 
 * `--include` `-i` — Explicitly include a command.
   This option can be provided multiple times.
 * `--readme` `-r` — Path (including filename) of the README file to modify.
   Default: '[CWD]/README.md'
+* `--usage` `-u` — Name of the section in the README file in which to insert the documentation.
+  Default: 'Usage'
 
 ## License: MIT
 

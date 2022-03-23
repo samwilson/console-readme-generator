@@ -9,10 +9,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ReadmeGenCommand extends Command
 {
-
     public function configure(): void
     {
         parent::configure();
@@ -32,6 +32,13 @@ class ReadmeGenCommand extends Command
             InputOption::VALUE_REQUIRED,
             'Path (including filename) of the README file to modify.',
             getcwd() . '/README.md'
+        );
+        $this->addOption(
+            'usage',
+            'u',
+            InputOption::VALUE_REQUIRED,
+            'Name of the section in the README file in which to insert the documentation.',
+            'Usage'
         );
     }
 
@@ -58,15 +65,25 @@ class ReadmeGenCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $commands = $this->getCommands($input);
+        $io = new SymfonyStyle($input, $output);
 
         if (count($commands) === 0) {
-            $output->writeln('No commands found to document. You might need to use the <info>--include</info> option.');
+            $io->write('No commands found to document.');
+            if (!$input->getOption('include')) {
+                $io->write(' You might need to use the <info>--include</info> option to specify a hidden command.');
+            }
+            $io->newLine();
+            $io->writeln('Available commands are:');
+            $io->listing(array_map(static function ($cmd) {
+                return $cmd->getName();
+            }, $this->getApplication()->all()));
+
             return Command::SUCCESS;
         }
 
         $commandInfo = '';
         foreach ($commands as $command) {
-            $output->writeln('Processing command: ' . $command->getName());
+            $io->writeln('Processing command: ' . $command->getName());
             $description = $command->getDescription() ? $command->getDescription() . "\n\n" : '';
             $commandInfo .= "\n### " . $command->getName() . "\n\n"
                 . $description
@@ -81,20 +98,23 @@ class ReadmeGenCommand extends Command
         // Write new contents to README.md.
         $readmePath = $input->getOption('readme');
         if (!file_exists($readmePath)) {
-            $output->writeln('ERROR: readme file not found ' . $readmePath);
-            $output->writeln('You can specify a filename with the the <info>--readme</info> option.');
+            $io->error('README file not found: ' . $readmePath);
+            $io->writeln('You can specify a filename with the the <info>--readme</info> option.');
             return Command::FAILURE;
         }
         $readme = file_get_contents($readmePath);
-        preg_match("/(.*## Usage\n)(.*)(\n## .*)/s", $readme, $matches);
+        $usageSection = $input->getOption('usage');
+        preg_match("/(.*#+ ?$usageSection\n)(.*)(\n## .*)/s", $readme, $matches);
         if (!isset($matches[1])) {
-            $output->writeln('ERROR: no "## Usage" header found in ' . $readmePath);
+            $io->error('No "' . $usageSection . '" header found in ' . $readmePath);
             return Command::FAILURE;
         }
         $newReadme = $matches[1] . $commandInfo . $matches[3];
         if ($newReadme !== $readme) {
             file_put_contents($readmePath, $newReadme);
-            $output->writeln('Updated README.md');
+            $io->success('Updated README: ' . $readmePath);
+        } else {
+            $io->success('No changes required to README: ' . $readmePath);
         }
 
         return Command::SUCCESS;
