@@ -27,7 +27,7 @@ Generate command documentation for a Readme file.
 
     generate-readme [-i|--include INCLUDE] [-r|--readme README] [-u|--usage USAGE]
 
-* `--include` `-i` — Explicitly include a command.
+* `--include` `-i` — Explicitly include a command (e.g. "app:foo") or namespace (e.g. "app:" with trailing colon).
   This option can be provided multiple times.
 * `--readme` `-r` — Path (including filename) of the README file to modify.
   Default: '[CWD]/README.md'
