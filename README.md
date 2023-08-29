@@ -25,7 +25,10 @@ The usage documentation below is an example of the output.
 
 Generate command documentation for a Readme file.
 
-    generate-readme [-i|--include INCLUDE] [-r|--readme README] [-u|--usage USAGE]
+
+```console
+generate-readme [-i|--include INCLUDE] [-r|--readme README] [-u|--usage USAGE]
+```
 
 * `--include` `-i` — Explicitly include a command (e.g. "app:foo") or namespace (e.g. "app:" with trailing colon).
   This option can be provided multiple times.
