@@ -7,7 +7,10 @@
     <arg name="cache" value=".phpcs-cache"/>
     <arg name="colors"/>
 
-    <rule ref="PSR12Ext" />
+    <rule ref="PSR12Ext">
+        <exclude name="SlevomatCodingStandard.Classes.RequireAbstractOrFinal.ClassNeitherAbstractNorFinal" />
+        <exclude name="SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh" />
+    </rule>
 
     <file>.</file>
 
