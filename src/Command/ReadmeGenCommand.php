@@ -42,34 +42,6 @@ class ReadmeGenCommand extends Command
         );
     }
 
-    /**
-     * @return Command[]
-     */
-    private function getCommands(InputInterface $input): array
-    {
-        $included = $input->getOption('include');
-        $allCommands = $this->getApplication()->all();
-        $out = [];
-        $defaultExcluded = ['help', 'list', $this->getName()];
-        foreach ($allCommands as $command) {
-            // Include if not in the default excluded list.
-            $include = !in_array($command->getName(), $defaultExcluded);
-            foreach ($included as $inc) {
-                // Include if the name matches.
-                $include = $command->getName() === $inc
-                    // Include if the whole namespace is included.
-                    || (substr($inc, -1) === ':' && str_starts_with($command->getName(), $inc) );
-                if ($include) {
-                    break;
-                }
-            }
-            if ($include) {
-                $out[] = $command;
-            }
-        }
-        return $out;
-    }
-
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $commands = $this->getCommands($input);
@@ -126,6 +98,34 @@ class ReadmeGenCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * @return Command[]
+     */
+    private function getCommands(InputInterface $input): array
+    {
+        $included = $input->getOption('include');
+        $allCommands = $this->getApplication()->all();
+        $out = [];
+        $defaultExcluded = ['help', 'list', $this->getName()];
+        foreach ($allCommands as $command) {
+            // Include if not in the default excluded list.
+            $include = !in_array($command->getName(), $defaultExcluded);
+            foreach ($included as $inc) {
+                // Include if the name matches.
+                $include = $command->getName() === $inc
+                    // Include if the whole namespace is included.
+                    || (substr($inc, -1) === ':' && str_starts_with($command->getName(), $inc) );
+                if ($include) {
+                    break;
+                }
+            }
+            if ($include) {
+                $out[] = $command;
+            }
+        }
+        return $out;
     }
 
     /**
