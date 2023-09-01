@@ -84,7 +84,7 @@ class ReadmeGenCommand extends Command
         }
         $readme = file_get_contents($readmePath);
         $usageSection = $input->getOption('usage');
-        preg_match("/(.*\n## ?$usageSection\n)(.*)(\n## .*)/s", $readme, $matches);
+        preg_match("/(.*\n## ?$usageSection\n)(.*?)(\n## .*)/s", $readme, $matches);
         if (!isset($matches[1])) {
             $io->error('No "## ' . $usageSection . '" header found in ' . $readmePath);
             return Command::FAILURE;
