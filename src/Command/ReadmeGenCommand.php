@@ -67,7 +67,7 @@ class ReadmeGenCommand extends Command
             $description = $command->getDescription() ? $command->getDescription() . "\n\n" : '';
             $commandInfo .= "\n### " . $command->getName() . "\n\n"
                 . $description
-                . '    ' . $command->getSynopsis() . "\n\n"
+                . "\n```console\n" . $command->getSynopsis() . "\n```\n\n"
                 . $this->formatOptions($command->getDefinition()->getOptions())
                 . $this->formatArguments($command->getDefinition()->getArguments());
         }
