@@ -25,7 +25,6 @@ The usage documentation below is an example of the output.
 
 Generate command documentation for a Readme file.
 
-
 ```console
 generate-readme [-i|--include INCLUDE] [-r|--readme README] [-u|--usage USAGE]
 ```

@@ -64,7 +64,7 @@ class ReadmeGenCommand extends Command
         $commandInfo = '';
         foreach ($commands as $command) {
             $io->writeln('Processing command: ' . $command->getName());
-            $description = $command->getDescription() ? $command->getDescription() . "\n\n" : '';
+            $description = $command->getDescription() ? $command->getDescription() . "\n" : '';
             $commandInfo .= "\n### " . $command->getName() . "\n\n"
                 . $description
                 . "\n```console\n" . $command->getSynopsis() . "\n```\n\n"
